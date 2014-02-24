@@ -45,6 +45,6 @@ timeOverview.update([env.measurementStartTime, env.measurementEndTime], [env.par
 
 or
 
-timeOverview.updateSelection([env.params.startDate, env.params.endDate]);
+timeOverview.updateSelection(startDate, endDate]);
 
 
