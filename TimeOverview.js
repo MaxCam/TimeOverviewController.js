@@ -2,6 +2,7 @@
  * Author: Massimo Candela - massimocandela.com
  * This is an amd time overview controller.
  * This can provide a good time overview/management to the user while your tool is visualising ongly a small portion of it.
+ * It is based on http://bl.ocks.org/mbostock/6232620
  */
 
 define([
