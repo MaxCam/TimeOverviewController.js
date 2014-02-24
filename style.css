@@ -1,0 +1,37 @@
+
+.brusher .axis text {
+    font: 11px sans-serif;
+}
+
+.brusher .axis path {
+    display: none;
+}
+
+.brusher .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.brusher .grid-background {
+    fill: #C0C0C0;
+}
+
+.brusher .grid line,
+.brusher .grid path {
+    fill: none;
+    stroke: #fff;
+    shape-rendering: crispEdges;
+}
+
+.brusher .grid .minor.tick line {
+    stroke-opacity: .5;
+}
+
+.brusher .brush .extent {
+    stroke: blue;
+    stroke-opacity: 0.6;
+    fill: blue;
+    fill-opacity: 0.3;
+    shape-rendering: crispEdges;
+}
