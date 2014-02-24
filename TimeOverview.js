@@ -20,7 +20,9 @@ define([
 
         this.init = function(domElement, domainRange, currentSelection){
             dom = domElement;
-            this.render(domainRange, currentSelection);
+            if (domainRange && currentSelection){
+                this.render(domainRange, currentSelection);
+            }
         };
 
 
