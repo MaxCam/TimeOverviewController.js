@@ -169,11 +169,9 @@ define([
         };
 
         this.updateSelection = function(startDate, endDate){
-            d3.select(dom)
-                .select(".brusher")
-                .remove();
-
-            this.render(this.domainRange, [startDate, endDate]);
+            groupOverview
+                .transition()
+                .call(brush.extent([startDate, endDate]));
         };
     };
 
