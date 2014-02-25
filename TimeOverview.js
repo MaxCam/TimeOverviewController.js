@@ -170,7 +170,6 @@ define([
 
         this.updateSelection = function(startDate, endDate){
             groupOverview
-                .transition()
                 .call(brush.extent([startDate, endDate]));
         };
     };
