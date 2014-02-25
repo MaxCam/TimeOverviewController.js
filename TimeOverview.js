@@ -6,20 +6,22 @@
  */
 
 define([
-    "lib.d3"
+    "lib.d3" // Load d3 - put your path here
 ], function(d3){
 
     var TimeOverviewView = function(options, callback, context){
-        var domainRange, timeMapper, timeTicker, brusherBucketLevelsMinutes, timeGrid, margins, width, config,
-            height, brush, xAxis, svg, groupOverview, currentSelection, timeUnitGrid, $this, margins, dom;
+        var timeMapper, timeTicker, brusherBucketLevelsMinutes, timeGrid, margins, width, hideIfLessThanSeconds,
+            height, brush, xAxis, svg, groupOverview, timeUnitGrid, $this, margins, dom;
 
         $this = this;
         margins = options.margins;
-        config = options.config;
         brusherBucketLevelsMinutes = options.granularityLevels;
+        hideIfLessThanSeconds = options.hideIfLessThanSeconds;
+
 
         this.init = function(domElement, domainRange, currentSelection){
             dom = domElement;
+
             if (domainRange && currentSelection){
                 this.render(domainRange, currentSelection);
             }
@@ -27,7 +29,7 @@ define([
 
 
         this._afterInteraction = function(){
-            if (!d3.event.sourceEvent) return; // only transition after input
+            if (!d3.event.sourceEvent) return;
             var extent0, selectionPoints;
 
             extent0 = brush.extent();
@@ -47,7 +49,7 @@ define([
         };
 
         this._duringInteraction = function(){
-            if (!d3.event.sourceEvent) return; // Only transitions after input
+            if (!d3.event.sourceEvent) return;
             var extent0, selectionPoints;
 
             extent0 = brush.extent();
@@ -66,21 +68,28 @@ define([
 
 
         this.render = function(domainRange, currentSelection){
+            var timeWindow;
 
             this.domainRange = domainRange;
             this.currentSelection = currentSelection;
 
-            if (domainRange[1] - domainRange[0] < (brusherBucketLevelsMinutes.day * 60 * 1000)){
+            timeWindow = domainRange[1] - domainRange[0];
+
+            if (timeWindow < hideIfLessThanSeconds * 1000){
+                return false;
+            }
+
+            if (timeWindow < (brusherBucketLevelsMinutes.day * 60 * 1000)){
                 timeMapper = d3.time.day;
                 timeTicker = d3.time.days;
                 timeGrid = d3.time.hours;
                 timeUnitGrid = d3.time.hour;
-            }else if (domainRange[1] - domainRange[0] < (brusherBucketLevelsMinutes.week * 60 * 1000)){
+            }else if (timeWindow < (brusherBucketLevelsMinutes.week * 60 * 1000)){
                 timeMapper = d3.time.week;
                 timeTicker = d3.time.weeks;
                 timeGrid = d3.time.days;
                 timeUnitGrid = d3.time.day;
-            }else if (domainRange[1] - domainRange[0] < (brusherBucketLevelsMinutes.month * 60 * 1000)){
+            }else if (timeWindow < (brusherBucketLevelsMinutes.month * 60 * 1000)){
                 timeMapper = d3.time.month;
                 timeTicker = d3.time.months;
                 timeGrid = d3.time.weeks;
@@ -159,19 +168,31 @@ define([
                 .attr("dx", "-1.2em")
                 .attr("dy", ".15em")
                 .attr('transform', 'rotate(-65)');
+
+            return true;
         };
 
         this.update = function(domainRange, currentSelection){
-            d3.select(dom)
-                .select(".brusher")
-                .remove();
 
-            this.render(domainRange, currentSelection);
+            if (this.domainRange == domainRange){
+                return this.updateSelection(currentSelection);
+            }else{
+                d3.select(dom)
+                    .select(".brusher")
+                    .remove();
+
+                return this.render(domainRange, currentSelection);
+            }
         };
 
-        this.updateSelection = function(startDate, endDate){
-            groupOverview
-                .call(brush.extent([startDate, endDate]));
+        this.updateSelection = function(currentSelection){
+
+            if (this.currentSelection != currentSelection){
+                groupOverview
+                    .call(brush.extent(currentSelection));
+                return true;
+            }
+            return false;
         };
     };
 
