@@ -68,6 +68,7 @@ define([
         this.render = function(domainRange, currentSelection){
 
             this.domainRange = domainRange;
+            this.currentSelection = currentSelection;
 
             if (domainRange[1] - domainRange[0] < (brusherBucketLevelsMinutes.day * 60 * 1000)){
                 timeMapper = d3.time.day;
