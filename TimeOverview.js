@@ -9,19 +9,19 @@ define([
     "lib.d3" // Load d3 - put your path here
 ], function(d3){
 
-
     var TimeOverviewView = function(options, callback, context){
         var timeMapper, timeTicker, brusherBucketLevelsMinutes, timeGrid, margins, width, hideIfLessThanSeconds,
-            height, brush, xAxis, svg, groupOverview, timeUnitGrid, $this, margins, dom, labels, verticalLabels;
+            height, brush, xAxis, svg, groupOverview, timeUnitGrid, $this, margins, dom, labels, verticalLabels,
+            format;
 
         $this = this;
         margins = options.margins;
         brusherBucketLevelsMinutes = options.granularityLevels;
         hideIfLessThanSeconds = options.hideIfLessThanSeconds;
-        verticalLabels = options.verticalLabels || true;
+        verticalLabels = (options.verticalLabels != null) ? options.verticalLabels : true;
+        format = options.format || d3.time.format("%Y-%m-%d");
 
-
-        this.init = function(domElement, domainRange, currentSelection){
+         this.init = function(domElement, domainRange, currentSelection){
             dom = domElement;
 
             if (domainRange && currentSelection){
@@ -179,7 +179,7 @@ define([
                     .scale(xAxis)
                     .orient("bottom")
                     .ticks(timeTicker)
-                    .tickFormat(d3.time.format("%Y-%m-%d"))
+                    .tickFormat(format)
                     .tickPadding(0))
                 .selectAll("text")
                 .attr("x", 6)
