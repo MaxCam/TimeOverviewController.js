@@ -9,14 +9,16 @@ define([
     "lib.d3" // Load d3 - put your path here
 ], function(d3){
 
+
     var TimeOverviewView = function(options, callback, context){
         var timeMapper, timeTicker, brusherBucketLevelsMinutes, timeGrid, margins, width, hideIfLessThanSeconds,
-            height, brush, xAxis, svg, groupOverview, timeUnitGrid, $this, margins, dom;
+            height, brush, xAxis, svg, groupOverview, timeUnitGrid, $this, margins, dom, labels, verticalLabels;
 
         $this = this;
         margins = options.margins;
         brusherBucketLevelsMinutes = options.granularityLevels;
         hideIfLessThanSeconds = options.hideIfLessThanSeconds;
+        verticalLabels = options.verticalLabels || true;
 
 
         this.init = function(domElement, domainRange, currentSelection){
@@ -30,16 +32,43 @@ define([
 
         this._afterInteraction = function(){
             if (!d3.event.sourceEvent) return;
-            var extent0, selectionPoints;
+            var extent0, selectionPoints, boundedLeft, boundedRight, selectionPointsRounded, magneticEffect;
 
             extent0 = brush.extent();
 
+            boundedLeft = false;
+            boundedRight = false;
+            magneticEffect = 10 * 60 * 60 * 1000;
+
             // Magnetic effect
-            selectionPoints = extent0.map(timeUnitGrid.round);
+            selectionPoints = extent0;
+            selectionPointsRounded = extent0.map(timeUnitGrid.round);
+
+            if (selectionPoints[0].getTime() <= $this.domainRange[0].getTime() + magneticEffect){
+                selectionPoints[0] = $this.domainRange[0];
+                boundedLeft = true;
+            }
+
+            if (selectionPoints[1].getTime()  >= $this.domainRange[1].getTime() - magneticEffect){
+                selectionPoints[1] = $this.domainRange[1];
+                boundedRight = true;
+            }
+
+            if (boundedLeft && !boundedRight){
+                selectionPoints[1] = selectionPointsRounded[1];
+            }else if (!boundedLeft && boundedRight){
+                selectionPoints[0] = selectionPointsRounded[0];
+            }else if (!boundedLeft && !boundedRight){
+                selectionPoints[0] = selectionPointsRounded[0];
+                selectionPoints[1] = selectionPointsRounded[1];
+            }
+
+
             if (selectionPoints[0] >= selectionPoints[1]) {
                 selectionPoints[0] = timeUnitGrid.floor(extent0[0]);
                 selectionPoints[1] = timeUnitGrid.ceil(extent0[1]);
             }
+
 
             // Apply magnetic feedback
             d3.select(this).transition()
@@ -163,11 +192,15 @@ define([
             groupOverview.selectAll("rect")
                 .attr("height", height);
 
-            svg.selectAll("text")
-                .style("text-anchor", "end")
-                .attr("dx", "-1.2em")
-                .attr("dy", ".15em")
-                .attr('transform', 'rotate(-65)');
+            labels = svg.selectAll("text")
+                .style("text-anchor", "end");
+
+            if (verticalLabels){
+                labels
+                    .attr("dx", "-1.2em")
+                    .attr("dy", ".15em")
+                    .attr('transform', 'rotate(-65)');
+            }
 
             return true;
         };
