@@ -30,10 +30,8 @@ var timeOverview = new TimeOverviewView(
         // Your code th update your visualisation
     }
     , this);
-`
-    
+
 #How to start it
-`
 
 ```javascript
 timeOverview.init(domElement, [totalStartTime, totalEndTime], [selectionStartDate, selectionEndDate]);
@@ -43,9 +41,9 @@ timeOverview.init(domElement, [totalStartTime, totalEndTime], [selectionStartDat
 
 ```javascript
 timeOverview.update([env.measurementStartTime, env.measurementEndTime], [env.params.startDate, env.params.endDate]);
-`
+
 or
 ```javascript
 timeOverview.updateSelection(startDate, endDate);
-`
+
 
