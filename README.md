@@ -30,20 +30,20 @@ var timeOverview = new TimeOverviewView(
         // Your code th update your visualisation
     }
     , this);
-
+```
 #How to start it
 
 ```javascript
 timeOverview.init(domElement, [totalStartTime, totalEndTime], [selectionStartDate, selectionEndDate]);
-`
+```
 
 #How to update it
 
 ```javascript
 timeOverview.update([env.measurementStartTime, env.measurementEndTime], [env.params.startDate, env.params.endDate]);
-
+```
 or
 ```javascript
 timeOverview.updateSelection(startDate, endDate);
-
+```
 
