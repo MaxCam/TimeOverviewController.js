@@ -6,7 +6,7 @@ This is a simple and easy to use time overview controller
 
 #How to initialise it
 
-
+```javascript
 var timeOverview = new TimeOverviewView(
     {
         margins: {
@@ -30,7 +30,7 @@ var timeOverview = new TimeOverviewView(
         // Your code th update your visualisation
     }
     , this);
-    
+```javascript
     
 #How to start it
 
