@@ -1,8 +1,8 @@
 /**
  * Author: Massimo Candela
  * This is an amd time overview controller.
- * This can provide a good time overview/management to the user while your tool is visualising only a small portion of it.
- * It is based on http://bl.ocks.org/mbostock/6232620
+ * The SVG part is based on http://bl.ocks.org/mbostock/6232620
+ * On top of the SVG, this module provides high-level functions to manage interactions.
  */
 
 define([
