@@ -4,7 +4,7 @@ TimeOverviewController.js
 This is a simple and easy to use time overview controller
 
 
-##How to initialise it
+## How to initialise it
 
 ```javascript
 var timeOverview = new TimeOverviewView(
@@ -33,13 +33,13 @@ var timeOverview = new TimeOverviewView(
     }
     , this);
 ```
-##How to start it
+## How to start it
 
 ```javascript
 timeOverview.init(domElement, [totalStartTime, totalEndTime], [selectionStartDate, selectionEndDate]);
 ```
 
-##How to update it
+## How to update it
 
 ```javascript
 timeOverview.update([env.measurementStartTime, env.measurementEndTime], [env.params.startDate, env.params.endDate]);
